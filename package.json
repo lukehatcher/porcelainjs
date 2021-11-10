@@ -1,0 +1,34 @@
+{
+  "name": "porcelainjs",
+  "version": "1.0.0",
+  "description": "A utility class that makes parsing `git status --porcelain` fun.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest -u",
+    "dev": "ts-node ./src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukehatcher/porcelainjs.git"
+  },
+  "keywords": [
+    "git",
+    "status",
+    "utility",
+    "parse"
+  ],
+  "author": "Luke Hatcher",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lukehatcher/porcelainjs/issues"
+  },
+  "homepage": "https://github.com/lukehatcher/porcelainjs#readme",
+  "devDependencies": {
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.7",
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  }
+}
