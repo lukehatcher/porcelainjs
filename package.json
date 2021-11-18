@@ -2,10 +2,10 @@
   "name": "porcelainjs",
   "version": "1.0.0",
   "description": "A utility class that makes parsing `git status --porcelain` fun.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest -u",
-    "dev": "ts-node ./src/index.ts",
+    "dev": "tsc && node ./dist/index.js",
     "lint": "eslint . --ext .ts"
   },
   "repository": {
