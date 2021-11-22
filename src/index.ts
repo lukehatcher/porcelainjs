@@ -1,9 +1,12 @@
 import { spawnSync, SpawnSyncReturns } from 'child_process';
 
 import { GitLocation, StatusCodes } from './types/enums';
+import { IFilenameStatusHashTable } from './types/interfaces';
 
 class Porcelain {
-  private statusFiles: Map<string, string> = new Map<string, string>();
+  private statusFiles: Map<string, string> = new Map<string, string>(); // TODO: type values
+  private statusFilesSet: Set<string> = new Set<string>();
+  private statusFilesHashTable: IFilenameStatusHashTable = {};
 
   // constructor() {}
 
@@ -15,13 +18,34 @@ class Porcelain {
     const status: SpawnSyncReturns<Buffer> = spawnSync('git', ['status', '--porcelain', '-z']);
     // status.stdout.toString().split('\x00');
     const files = status.stdout.toString().split('\x00');
-    // populate set
+    this.statusFiles.clear();
     for (let i = 0; i < files.length - 1; ++i) {
       const filename = files[i].substring(files[i].lastIndexOf(' ') + 1);
       const status = files[i].substring(0, files[i].lastIndexOf(' '));
-      // this.statusFiles.add(filename);
-      console.log(status);
-      this.statusFiles.set(filename, status); // need to use enum
+      this.statusFiles.set(filename, status);
+    }
+  }
+
+  private populateGitStatusHashSet(): void {
+    // onlny generate this when users ask for it (want to keep main fetch func small)
+    const status: SpawnSyncReturns<Buffer> = spawnSync('git', ['status', '--porcelain', '-z']);
+    const files = status.stdout.toString().split('\x00');
+    this.statusFilesSet.clear();
+    for (let i = 0; i < files.length - 1; ++i) {
+      const filename = files[i].substring(files[i].lastIndexOf(' ') + 1);
+      this.statusFilesSet.add(filename);
+    }
+  }
+
+  private populateGitStatusHashTable(): void {
+    // onlny generate this when users ask for it (want to keep main fetch func small)
+    const status: SpawnSyncReturns<Buffer> = spawnSync('git', ['status', '--porcelain', '-z']);
+    const files = status.stdout.toString().split('\x00');
+    this.statusFilesHashTable = {};
+    for (let i = 0; i < files.length - 1; ++i) {
+      const filename = files[i].substring(files[i].lastIndexOf(' ') + 1);
+      const status = files[i].substring(0, files[i].lastIndexOf(' '));
+      this.statusFilesHashTable[filename] = status;
     }
   }
 
@@ -94,6 +118,24 @@ class Porcelain {
   public isUpdatedButUnmerged(filename: string, gitLocation?: GitLocation): boolean {
     this.populateGitStatus();
     return this.checkFile(filename, StatusCodes.UPDATED_BUT_UNMERGED, gitLocation);
+  }
+
+  // =======================================================
+  // get status files in your preferred DS
+  // =======================================================
+  public get getMap(): Map<string, string> {
+    this.populateGitStatus();
+    return this.statusFiles;
+  }
+
+  public get getSet(): Set<string> {
+    this.populateGitStatusHashSet();
+    return this.statusFilesSet;
+  }
+
+  public get getHashTable(): IFilenameStatusHashTable {
+    this.populateGitStatusHashTable();
+    return this.statusFilesHashTable;
   }
 }
 
