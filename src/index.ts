@@ -1,14 +1,15 @@
 import { spawnSync, SpawnSyncReturns } from 'child_process';
 
+import { GitLocation, StatusCodes } from './types/enums';
+
 class Porcelain {
-  private statusFiles: Set<string> = new Set<string>();
-  private fileStatuses: Map<string, string> = new Map<string, string>(); // need to use for status
+  private statusFiles: Map<string, string> = new Map<string, string>();
 
   // constructor() {}
 
-  /**
-   * Populate the list of files.
-   */
+  // =======================================================
+  // private "util functions"
+  // =======================================================
   private populateGitStatus(): void {
     // run command
     const status: SpawnSyncReturns<Buffer> = spawnSync('git', ['status', '--porcelain', '-z']);
@@ -18,96 +19,82 @@ class Porcelain {
     for (let i = 0; i < files.length - 1; ++i) {
       const filename = files[i].substring(files[i].lastIndexOf(' ') + 1);
       const status = files[i].substring(0, files[i].lastIndexOf(' '));
-      this.statusFiles.add(filename);
+      // this.statusFiles.add(filename);
       console.log(status);
-      this.fileStatuses.set(filename, status); // need to use enum
+      this.statusFiles.set(filename, status); // need to use enum
     }
   }
 
-  /**
-   * Check for if a file name would be in the git status list.
-   */
+  private checkFile(filename: string, statusCode: StatusCodes, gitLocation: GitLocation | undefined): boolean {
+    const gitFile = this.statusFiles.get(filename) ?? false;
+
+    if (gitFile) {
+      if (gitLocation) {
+        if (gitLocation === GitLocation.INDEX) {
+          return gitFile[0] === statusCode;
+        } else {
+          return gitFile[1] === statusCode;
+        }
+      }
+      return gitFile.includes(statusCode);
+    }
+    return false;
+  }
+
+  // =======================================================
+  // top level checks
+  // =======================================================
   public isFileInStatus(filename: string): boolean {
+    // need to handle:
+    // 1) user gives us relative path (like in git status)
+    // 2) user gives path from root
+    // 3) user gives path from root but leads with a ./
     this.populateGitStatus();
     return this.statusFiles.has(filename);
   }
 
-  /**
-   * Check for if a file name would be in the git status list and if so, check if its modified
-   */
-  public isModified(filename: string): boolean {
+  public isFileUntracked(filename: string): boolean {
     this.populateGitStatus();
-    const status = this.fileStatuses.get(filename) ?? false;
-    if (status) {
-      return status.includes('M');
-    }
-    return false;
+    return this.checkFile(filename, StatusCodes.UNTRACKED, undefined);
   }
 
-  public isFileTypeChanged(filename: string): boolean {
+  // =======================================================
+  // check if a file is XY
+  // =======================================================
+  public isModified(filename: string, gitLocation?: GitLocation): boolean {
     this.populateGitStatus();
-    const status = this.fileStatuses.get(filename) ?? false;
-    if (status) {
-      return status.includes('T');
-    }
-    return false;
+    return this.checkFile(filename, StatusCodes.MODIFIED, gitLocation);
   }
 
-  public isAdded(filename: string): boolean {
+  public isFileTypeChanged(filename: string, gitLocation?: GitLocation): boolean {
     this.populateGitStatus();
-    const status = this.fileStatuses.get(filename) ?? false;
-    if (status) {
-      return status.includes('A');
-    }
-    return false;
+    return this.checkFile(filename, StatusCodes.FILE_TYPE_CHANGED, gitLocation);
   }
 
-  public isDeleted(filename: string): boolean {
+  public isAdded(filename: string, gitLocation?: GitLocation): boolean {
     this.populateGitStatus();
-    const status = this.fileStatuses.get(filename) ?? false;
-    if (status) {
-      return status.includes('D');
-    }
-    return false;
+    return this.checkFile(filename, StatusCodes.ADDED, gitLocation);
   }
 
-  public isRenamed(filename: string): boolean {
+  public isDeleted(filename: string, gitLocation?: GitLocation): boolean {
     this.populateGitStatus();
-    const status = this.fileStatuses.get(filename) ?? false;
-    if (status) {
-      return status.includes('R');
-    }
-    return false;
+    return this.checkFile(filename, StatusCodes.DELETED, gitLocation);
   }
 
-  public isCopied(filename: string): boolean {
+  public isRenamed(filename: string, gitLocation?: GitLocation): boolean {
     this.populateGitStatus();
-    const status = this.fileStatuses.get(filename) ?? false;
-    if (status) {
-      return status.includes('C');
-    }
-    return false;
+    return this.checkFile(filename, StatusCodes.RENAMED, gitLocation);
   }
 
-  public isUpdatedButUnmerged(filename: string): boolean {
+  public isCopied(filename: string, gitLocation?: GitLocation): boolean {
     this.populateGitStatus();
-    const status = this.fileStatuses.get(filename) ?? false;
-    if (status) {
-      return status.includes('U');
-    }
-    return false;
+    return this.checkFile(filename, StatusCodes.COPIED, gitLocation);
   }
 
-  public isUntracked(filename: string): boolean {
+  public isUpdatedButUnmerged(filename: string, gitLocation?: GitLocation): boolean {
     this.populateGitStatus();
-    const status = this.fileStatuses.get(filename) ?? false;
-    if (status) {
-      return status === '??';
-    }
-    return false;
-  }
-
-  public get getList(): Set<string> {
-    return this.statusFiles;
+    return this.checkFile(filename, StatusCodes.UPDATED_BUT_UNMERGED, gitLocation);
   }
 }
+
+export default Porcelain;
