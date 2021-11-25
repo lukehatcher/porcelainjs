@@ -140,3 +140,42 @@ class Porcelain {
 }
 
 export default Porcelain;
+
+const inst = new Porcelain();
+console.log(inst.isFileInStatus('tsconfig.json'));
+console.log(inst.isModified('.gitignore'));
+// console.log(ans);
+// console.log('');
+// console.log(ans.split('\x00'));
+
+// =============
+// mapping out what we want to have and work with
+// ========
+
+// base check if a file is modified or not
+
+// features:
+// - pass it a file name to see if its tracked, or get its status
+// - fetch array of all items
+// - fetch set of all items
+// - fetch hset of all items
+//
+
+// want to be able to chain
+// Status.trackedOnly().modifiedOnly().toArray()
+//
+
+// Status.
+
+// use case:
+// - I want to use this with my cli so see if files X Y Z have uncommited changes
+
+// should never just return a
+
+// for i in file name:
+//  if file in list of modifieds:
+//    do thing....
+
+// notes on yarn --porcelain
+// it will list files from the root of the project (but without the ./ prefix)
+// ... this is unlike the raw git status command which will list files with their relative paths

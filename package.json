@@ -4,8 +4,8 @@
   "description": "A utility class that makes parsing `git status --porcelain` fun.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "jest -u",
     "dev": "tsc && node ./dist/index.js",
+    "test": "jest --coverage",
     "lint": "eslint . --ext .ts"
   },
   "repository": {
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/lukehatcher/porcelainjs#readme",
   "devDependencies": {
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^27.0.3",
     "@types/node": "^16.11.7",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
@@ -33,6 +33,7 @@
     "eslint-config-prettier": "^8.3.0",
     "jest": "^27.3.1",
     "prettier": "^2.4.1",
+    "ts-jest": "^27.0.7",
     "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
   }
