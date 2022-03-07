@@ -3,3 +3,6 @@ tsconfig.json
 dist
 
 coverage
+
+*.json
+*.yaml

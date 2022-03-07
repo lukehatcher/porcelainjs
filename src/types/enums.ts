@@ -3,7 +3,7 @@ export enum GitLocation {
   WORKINGTREE = 'working tree',
 }
 
-export enum StatusCodes {
+export enum StatusCode {
   UNMODIFIED = ' ',
   MODIFIED = 'M',
   FILE_TYPE_CHANGED = 'T',
