@@ -1,6 +1,6 @@
 {
   "name": "porcelainjs",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A utility class that makes parsing `git status --porcelain` fun.",
   "main": "dist/index.js",
   "scripts": {

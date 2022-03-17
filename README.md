@@ -17,7 +17,7 @@ const Porcelain = require('porcelainjs').Porcelain;
 ### ESM
 
 ```ts
-const Porcelain = require('porcelainjs');
+import { Porcelain } from 'porcelainjs';
 ```
 
 ## Usage
