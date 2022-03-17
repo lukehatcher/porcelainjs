@@ -6,15 +6,25 @@
 One use case (the one that inspired this package) was a Node.js script that performs very specific codemods on specific files.
 I wanted a simple way to check that certain files did not have unsaved/unstaged changes before letting the script run.
 
-## Usage
+## Import
+
+### CommonJS
+
+```ts
+const Porcelain = require('porcelainjs').Porcelain;
+```
+
+### ESM
 
 ```ts
 import { Porcelain } from 'porcelainjs';
+```
 
+## Usage
+
+```ts
 const gitStatusChecker = new Porcelain();
-
-// Must use absolute path from your git repo root.
-const gitStatusChecker.isFileModified('src/myFile');
+const gitStatusChecker.isFileModified('src/myFile'); // Must use absolute path from your git repo root.
 ```
 
 ## API
