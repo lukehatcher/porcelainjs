@@ -1,6 +1,7 @@
 import { spawnSync, SpawnSyncReturns } from 'child_process';
 
 type GitLocation = 'index' | 'working tree';
+// type StatusCode = ' ' | 'M' | 'T' | 'A' | 'D' | 'R' | 'C' | 'U' | '??';
 
 enum StatusCode {
   UNMODIFIED = ' ',
