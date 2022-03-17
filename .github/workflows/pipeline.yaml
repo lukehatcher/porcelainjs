@@ -2,9 +2,9 @@ name: porcelain pipeline
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   pipeline:
@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [14.x, 16.x]
 
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Type check
-        run: yarn type-check
+        run: yarn typecheck
       - name: Format codebase
         run: yarn format
       - name: Lint codebase
