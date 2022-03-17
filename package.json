@@ -19,7 +19,8 @@
     "git",
     "status",
     "utility",
-    "parse"
+    "parse",
+    "porcelain"
   ],
   "author": "Luke Hatcher",
   "license": "MIT",
