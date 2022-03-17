@@ -24,9 +24,9 @@ jobs:
         run: yarn install
       - name: Type check
         run: yarn typecheck
-      - name: Format codebase
-        run: yarn format
       - name: Lint codebase
         run: yarn lint
+      - name: Format codebase
+        run: yarn format
       - name: Run unit tests
         run: yarn test
