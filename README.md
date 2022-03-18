@@ -3,7 +3,7 @@
 
 ## Use case
 
-One use case (the one that inspired this package) was a Node.js script that performs very specific codemods on specific files.
+One use case (the one that inspired this package) is a Node.js script that performs very specific code modifications on predefined files.
 I wanted a simple way to check that certain files did not have unsaved/unstaged changes before letting the script run.
 
 ## Import
@@ -24,7 +24,7 @@ import { Porcelain } from 'porcelainjs';
 
 ```ts
 const gitStatusChecker = new Porcelain();
-const gitStatusChecker.isFileModified('src/myFile'); // Must use absolute path from your git repo root.
+const isModified = gitStatusChecker.isFileModified('src/myFile'); // Must use absolute path from your git repo root.
 ```
 
 ## API
@@ -36,7 +36,7 @@ interface IPorcelain {
   isFileUntracked(filename: string): boolean;
 
   // `filename` is an absolute path from your git repo root.
-  // `gitLocation` is an optional parameter allowing you to limit your search to the working tree or index.
+  // `gitLocation` is an optional parameter allowing you to limit your search to either the working tree or index.
   isModified(filename: string, gitLocation?: 'index' | 'working tree'): boolean;
   isFileTypeChanged(filename: string, gitLocation?: 'index' | 'working tree'): boolean;
   isAdded(filename: string, gitLocation?: 'index' | 'working tree'): boolean;
@@ -45,7 +45,7 @@ interface IPorcelain {
   isCopied(filename: string, gitLocation?: 'index' | 'working tree'): boolean;
   isUpdatedButUnmerged(filename: string, gitLocation?: 'index' | 'working tree'): boolean;
 
-  // Access a data structure of your choice with filename -> git status code mappings
+  // Turn your `git status` into the data structure of your choice with filename -> git status code mappings
   // see https://git-scm.com/docs/git-status#_short_format for documentation on git status formats
   get getHashTable(): Record<string, 'M' | 'T' | 'A' | 'D' | 'R' | 'C' | 'U' | '??' | ' '>;
   get getMap(): Map<string, 'M' | 'T' | 'A' | 'D' | 'R' | 'C' | 'U' | '??' | ' '>;
