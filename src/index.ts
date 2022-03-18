@@ -1,7 +1,6 @@
 import { spawnSync, SpawnSyncReturns } from 'child_process';
 
 type GitLocation = 'index' | 'working tree';
-// type StatusCode = ' ' | 'M' | 'T' | 'A' | 'D' | 'R' | 'C' | 'U' | '??';
 
 enum StatusCode {
   UNMODIFIED = ' ',
@@ -75,10 +74,6 @@ export class Porcelain implements IPorcelain {
     return false;
   }
 
-  /**
-   * @param filename relative path
-   * @returns whether or not the file is editied i.e. the file would show up with `$ git status`
-   */
   public isFileInStatus(filename: string): boolean {
     // Treat `./src/index.ts` and `src/index.ts` the same.
     if (filename.startsWith('./')) {
