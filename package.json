@@ -3,6 +3,7 @@
   "version": "0.0.7",
   "description": "A utility class that makes parsing `git status --porcelain` fun.",
   "main": "dist/index.min.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "clean": "rm dist/index.js",
