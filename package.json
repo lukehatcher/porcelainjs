@@ -1,6 +1,6 @@
 {
   "name": "porcelainjs",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A utility class that makes parsing `git status --porcelain` fun.",
   "main": "dist/index.min.js",
   "types": "dist/index.d.ts",
